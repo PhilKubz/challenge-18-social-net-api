@@ -3,19 +3,43 @@ const { Schema } = mongoose;
 
 // Reaction subdocument schema
 const ReactionSchema = new Schema({
-  // Reaction schema fields here
+  reactionBody: {
+    type: String,
+    required: true,
+    maxLength: 280
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const ThoughtSchema = new Schema({
-  // Thought schema fields here
+  thoughtText: {
+    type: String,
+    required: true,
+    minLength: 1,
+    maxLength: 280
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  reactions: [ReactionSchema]
 });
 
-// virtual reactionCount field for the Thought schema
+// Virtual field for reaction count
 ThoughtSchema.virtual('reactionCount').get(function () {
-  // logic to retrieve the length of the reactions array field
+  return this.reactions.length;
 });
-
-// any additional methods or hooks for the Thought model here
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
 

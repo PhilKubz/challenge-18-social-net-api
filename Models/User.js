@@ -2,15 +2,35 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  // User schema fields here
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/,
+  },
+  thoughts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Thought'
+    }
+  ],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
 });
 
-// the virtual friendCount field for the User schema
 UserSchema.virtual('friendCount').get(function () {
-  // logic to retrieve the length of the friends array field
+  return this.friends.length;
 });
-
-// any additional methods or hooks for the User model here
 
 const User = mongoose.model('User', UserSchema);
 
