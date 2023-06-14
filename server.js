@@ -13,17 +13,15 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social_network_db', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false
+  serverSelectionTimeoutMS: 5000 // Add this line
+}).then(() => {
+  // Start the server after successful database connection
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
 });
 
 // API routes
-app.use('/api', require('./api/index'));
-
-
-
-
-// server start
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.use('/api', require('./Routes/api'));

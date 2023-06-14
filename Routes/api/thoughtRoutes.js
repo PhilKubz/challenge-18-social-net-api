@@ -9,8 +9,9 @@ router.get('/', ThoughtController.getAllThoughts);
 router.get('/:id', ThoughtController.getThoughtById);
 router.post('/', ThoughtController.createThought);
 router.put('/:id', ThoughtController.updateThought);
-router.delete('/:id', ThoughtController.deleteThought);
+router.delete('/:id', ThoughtController.removeThought); // Changed route handler
 router.post('/:thoughtId/reactions', ThoughtController.createReaction);
-router.delete('/:thoughtId/reactions/:reactionId', ThoughtController.deleteReaction);
+router.delete('/:thoughtId/reactions/:reactionId', ThoughtController.removeReaction);
 
 module.exports = router;
+

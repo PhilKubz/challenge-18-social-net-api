@@ -1,5 +1,5 @@
-const User = require('./models/User');
-const Thought = require('./models/Thought');
+const Thought = require('../Models/Thought');
+const User = require('../Models/User');
 
 module.exports = {
   // Get all users
@@ -47,16 +47,26 @@ module.exports = {
   },
 
   // Remove a user by its _id
-  removeUser(req, res) {
-    User.findByIdAndRemove(req.params.userId)
+  deleteUser(req, res) {
+    User.findByIdAndRemove(req.params.id)
       .then((user) => {
         if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
-        // Remove the user's associated thoughts
-        return Thought.deleteMany({ _id: { $in: user.thoughts } });
+        // Remove user from any friend lists
+        User.updateMany(
+          { _id: { $in: user.friends } },
+          { $pull: { friends: req.params.id } }
+        )
+          .then(() => {
+            // Remove user's thoughts
+            return Thought.deleteMany({ userId: req.params.id });
+          })
+          .then(() => {
+            res.json({ message: 'User removed' });
+          })
+          .catch((err) => res.status(500).json(err));
       })
-      .then(() => res.json({ message: 'User and associated thoughts removed' }))
       .catch((err) => res.status(500).json(err));
   },
 
