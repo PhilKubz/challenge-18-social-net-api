@@ -1,16 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social_network_db', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-});
+const connectionString = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/social-network-api'
 
-const connection = mongoose.connection;
+mongoose.connect(connectionString).catch(error => console.error('Error connecting to MongoDB', error))
 
-connection.once('open', () => {
-  console.log('MongoDB database connection established successfully');
-});
-
-module.exports = connection;
+module.exports = mongoose.connection

@@ -1,12 +1,8 @@
-const express = require('express');
-const router = express.Router();
-
-// Import user and thought routes
-const userRoutes = require('./userRoutes');
+const router = require('express').Router();
 const thoughtRoutes = require('./thoughtRoutes');
+const userRoutes = require('./userRoutes');
 
-// Register user and thought routes
-router.use('/users', userRoutes);
-router.use('/thoughts', thoughtRoutes);
+router.use('/thought', thoughtRoutes);
+router.use('/user', userRoutes);
 
 module.exports = router;
